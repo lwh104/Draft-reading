@@ -1,0 +1,50 @@
+train_dataset:
+  type: Dataset
+  dataset_root: PaddleSeg/datasets/ship_datasets
+  train_path: PaddleSeg/datasets/ship_datasets/train.txt
+  num_classes: 3
+  transforms:
+    - type: RandomScaleAspect
+    - type: RandomHorizontalFlip
+    - type: RandomVerticalFlip
+    - type: Resize
+      target_size: [320, 320]
+    - type: Normalize
+  mode: train
+
+val_dataset:
+  type: Dataset
+  dataset_root: PaddleSeg/datasets
+  val_path: PaddleSeg/datasets/val.txt
+  num_classes: 3
+  transforms:
+    - type: RandomHorizontalFlip
+    - type: RandomVerticalFlip
+    - type: Resize
+      target_size: [320, 320]
+    - type: Normalize
+  mode: val
+
+# PaddleSeg/datasets/val.txt
+optimizer:
+  type: Momentum
+  momentum: 0.9
+  weight_decay: 4.0e-5
+
+lr_scheduler:
+  type: CosineAnnealingDecay
+  learning_rate: 0.01
+  T_max: 180
+
+batch_size: 16
+iters: 3000
+
+model:
+  type: CA_UNet
+  num_classes: 3
+  pretrained: Null
+
+loss:
+  types:
+    - type: CrossEntropyLoss
+  coef: [1]
